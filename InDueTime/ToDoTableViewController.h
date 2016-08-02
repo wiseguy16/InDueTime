@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  ToDoTableViewController.h
 //  InDueTime
 //
 //  Created by Gregory Weiss on 8/2/16.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface ToDoTableViewController : UITableViewController
 
 @end
-
