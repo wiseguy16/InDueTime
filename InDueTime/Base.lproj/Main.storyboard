@@ -18,14 +18,17 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GEQ-gs-wZC" id="esS-4r-ZXD">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ca6-NK-2Bz">
                                             <rect key="frame" x="536" y="7" width="51" height="31"/>
+                                            <connections>
+                                                <action selector="toDoSwitch:" destination="Iuq-K7-C3c" eventType="valueChanged" id="gqm-67-WlM"/>
+                                            </connections>
                                         </switch>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter a ToDo item..." minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QgU-5Y-U4Y">
-                                            <rect key="frame" x="15" y="12" width="501" height="21"/>
+                                            <rect key="frame" x="15" y="11.5" width="501" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <textInputTraits key="textInputTraits"/>
                                             <connections>

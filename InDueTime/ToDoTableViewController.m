@@ -19,6 +19,7 @@
 @property (strong, nonatomic) NSManagedObjectContext *moc;
 
 
+
 @end
 
 @implementation ToDoTableViewController
@@ -31,20 +32,20 @@
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     self.moc = appDelegate.managedObjectContext;
     
-/*
+
     // This block will fetch our counter objects from Core Data and load them in the tableView
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Counter class])];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([ToDoItem class])];
     NSError *error = nil;
-    NSArray *countersFromCoreData = [self.moc executeFetchRequest:fetchRequest error:&error];
+    NSArray *toDoItemsFromCoreData = [self.moc executeFetchRequest:fetchRequest error:&error];
     if (error)
     {
         NSLog(@"Could not fetch from moc: %@", [error localizedDescription]);
     }
     else
     {
-        [self.counters addObjectsFromArray:countersFromCoreData];
+        [self.toDoItems addObjectsFromArray:toDoItemsFromCoreData];
     }
-*/    
+    
    
 }
 
@@ -72,6 +73,22 @@
     ToDoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ToDoCell" forIndexPath:indexPath];
     
     // Configure the cell...
+    
+    ToDoItem *aToDoItem = self.toDoItems[indexPath.row];
+    
+    if (aToDoItem.toDoDescription &&![aToDoItem.toDoDescription isEqualToString:@""])
+    {
+        [cell.toDoTextField setText:aToDoItem.toDoDescription];
+        //[cell.toDoSwitch setOn:aToDoItem.isDone];
+        [cell.toDoSwitch setOn:[aToDoItem.isDone boolValue]];
+       // cell.toDoSwitch.on = [[self.toDoItems valueForKey:@"isDone"] boolValue];
+        
+    }
+    else
+    {
+        [cell.toDoTextField becomeFirstResponder];
+    }
+    //cell.toDo.text = [NSString stringWithFormat:@"%d", [aCounter.count intValue]];
     
     return cell;
 }
@@ -121,6 +138,46 @@
 }
 */
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    BOOL rc = NO;
+    if (![textField.text isEqualToString:@""])
+    {
+        UIView *contentView = [textField superview];
+        ToDoCell *cell = (ToDoCell *)[contentView superview];
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        ToDoItem *aToDoItem = self.toDoItems[indexPath.row];
+        aToDoItem.toDoDescription = textField.text;
+        [textField resignFirstResponder];
+        
+        [self saveContext];
+    }
+    
+    return rc;  // rc stands for ReturnCode
+}
+
+
+- (IBAction)toDoSwitch:(UISwitch *)sender
+{
+    UIView *contentView = [sender superview];
+    ToDoCell *cell = (ToDoCell *)[contentView superview];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    ToDoItem *aToDoItem = self.toDoItems[indexPath.row];
+    //UISwitch *mySwitch = (UISwitch *)sender;
+    if ([sender isOn])
+    {
+        aToDoItem.isDone = [NSNumber numberWithBool:YES];
+        NSLog(@"its on!");
+    }
+    else if (![sender isOn])
+    {
+        aToDoItem.isDone = [NSNumber numberWithBool:NO];
+        NSLog(@"its off!");
+    }
+    [self saveContext];
+    
+}
+
 #pragma mark - Action Handlers
 
 - (IBAction)addToDoItem:(UIBarButtonItem *)sender
@@ -129,6 +186,20 @@
     ToDoItem *aToDoItem = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([ToDoItem class]) inManagedObjectContext:self.moc];
     [self.toDoItems addObject:aToDoItem];
     [self.tableView reloadData];
+    
+}
+
+
+#pragma mark - misc
+
+- (void)saveContext
+{
+    NSError *error = nil;
+    [self.moc save:&error];
+    if (error)
+    {
+        NSLog(@"Error saving moc: %@", [error localizedDescription]);
+    }
     
 }
 
