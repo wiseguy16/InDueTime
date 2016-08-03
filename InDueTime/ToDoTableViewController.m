@@ -79,16 +79,13 @@
     if (aToDoItem.toDoDescription &&![aToDoItem.toDoDescription isEqualToString:@""])
     {
         [cell.toDoTextField setText:aToDoItem.toDoDescription];
-        //[cell.toDoSwitch setOn:aToDoItem.isDone];
         [cell.toDoSwitch setOn:[aToDoItem.isDone boolValue]];
-       // cell.toDoSwitch.on = [[self.toDoItems valueForKey:@"isDone"] boolValue];
         
     }
     else
     {
         [cell.toDoTextField becomeFirstResponder];
     }
-    //cell.toDo.text = [NSString stringWithFormat:@"%d", [aCounter.count intValue]];
     
     return cell;
 }
@@ -103,89 +100,27 @@
 
 
 
-
-
-
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
         ToDoItem *toDoItemToDelete = self.toDoItems[indexPath.row];
-//        if (toDoItemToDelete.isDone == [NSNumber numberWithBool:YES])
         if ([toDoItemToDelete.isDone boolValue])
         {
             NSManagedObject *managedObject = self.toDoItems[indexPath.row];
             [self.moc deleteObject:managedObject];
-           // [self.managedObjectContext save:nil];
-            // Delete the row from the data source
-           // UIView *contentView = [UITableView superview];
-    //        ToDoCell *cell = (ToDoCell *)[contentView superview];
-    //        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    //        ToDoItem *aToDoItem = self.toDoItems[indexPath.row];
             [self.toDoItems removeObjectAtIndex:indexPath.row];
             [self saveContext];
             
             [tableView reloadData];
         }
         
-       // [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
-//    else if (editingStyle == UITableViewCellEditingStyleInsert)
-//    {
-//        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-//    }   
 }
 
-/*
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    ToDoItem *toDoItemToDelete = self.toDoItems[indexPath.row];
-    return  [toDoItemToDelete.isDone boolValue];
+#pragma mark - Action Handlers
 
-}
- */
-
-/*
- 
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath 
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) 
- {
- //remove the deleted object from your data source.
- //If your data source is an NSMutableArray, do this
- [self.dataArray removeObjectAtIndex:indexPath.row];
- [tableView reloadData]; // tell table to refresh now
- }
- }
- 
- 
- 
- */
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -227,7 +162,7 @@
     
 }
 
-#pragma mark - Action Handlers
+#pragma mark - More Action Handlers
 
 - (IBAction)addToDoItem:(UIBarButtonItem *)sender
 {
