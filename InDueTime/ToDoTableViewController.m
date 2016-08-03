@@ -95,7 +95,16 @@
  - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
  // Return NO if you do not want the specified item to be editable.
- return YES;
+    
+    ToDoItem *toDoItemToDelete = self.toDoItems[indexPath.row];
+    if ([toDoItemToDelete.isDone boolValue])
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
  }
 
 
@@ -105,17 +114,12 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        ToDoItem *toDoItemToDelete = self.toDoItems[indexPath.row];
-        if ([toDoItemToDelete.isDone boolValue])
-        {
             NSManagedObject *managedObject = self.toDoItems[indexPath.row];
             [self.moc deleteObject:managedObject];
             [self.toDoItems removeObjectAtIndex:indexPath.row];
             [self saveContext];
             
             [tableView reloadData];
-        }
-        
     }
 }
 
